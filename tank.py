@@ -15,20 +15,21 @@ all_sprites_group = pygame.sprite.Group()
 tank_bricks_group = pygame.sprite.Group()
 bricks_group = pygame.sprite.Group()
 
-tank = Tank('player1_U.png')
-all_sprites_group.add(tank)
-tank_bricks_group.add(tank)
 
 
 
-for i in range(40):
-    for j in range(30):
+for i in range(26):
+    for j in range(27):
 
         if Map[j][i] == 1:
-            brick = Brick('brick.jpg', (i)*BRICK_WIDTH , (j)*BRICK_HEIGHT )
+            brick = Brick('brick.png', (i)*BRICK_WIDTH , (j)*BRICK_HEIGHT )
             all_sprites_group.add(brick)
             bricks_group.add(brick)
             tank_bricks_group.add(brick)
+
+tank = Tank('Tank.png')
+all_sprites_group.add(tank)
+tank_bricks_group.add(tank)
 
 while True:
     
@@ -39,15 +40,26 @@ while True:
         elif event.type == KEYDOWN:
             if event.key == K_LEFT:
                 # 左鍵按下玩家向左移動
-                tank.move_left()
+                tank.move_left(bricks_group)
             elif event.key == K_RIGHT:
                 # 右鍵按下玩家向右移動
-                tank.move_right()
+                tank.move_right(bricks_group)
             elif event.key == K_UP:
-                tank.move_up()
+                tank.move_up(bricks_group)
             elif event.key == K_DOWN:
-                tank.move_down()
-
+                tank.move_down(bricks_group)
+            elif event.key == K_SPACE:
+                if not tank.bullet.life:
+                    tank.fire()
+                    all_sprites_group.add(tank.bullet)
+    if tank.bullet.life:
+        tank.bullet.move()
+        if pygame.sprite.spritecollide(tank.bullet, bricks_group, True):
+            tank.bullet.life = False
+            all_sprites_group.remove(tank.bullet)
+        if tank.bullet.rect.x > 640 or tank.bullet.rect.x < 0 or tank.bullet.rect.y > 640 or tank.bullet.rect.y < 0:
+            tank.bullet.life = False
+            all_sprites_group.remove(tank.bullet)
 
     window.fill((0, 0, 0))
     
