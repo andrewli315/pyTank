@@ -74,9 +74,9 @@ while True:
         text = font.render("You Win", False, Color(0, 0, 0))
         window.fill((255, 255, 255))
         window.blit(text, (int(WINDOW_WIDTH / 2) - int(text.get_width() / 2), 185))
-        gameStart = False
         clock.tick(60)
         pygame.display.flip()
+        gameStart = False
 
     if gameStart:
         window.fill((0, 0, 0))
