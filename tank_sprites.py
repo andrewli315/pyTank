@@ -60,12 +60,6 @@ class Brick(Tank_Sprite):
         Tank_Sprite.__init__(self, image_file)
         self.rect.left, self.rect.top = x, y
 
-class Grass(Tank_Sprite):
-    def __init__(self, image_file, x, y):
-    # 設定磚塊位置
-        Tank_Sprite.__init__(self, image_file)
-        self.rect.x, self.rect.y = x, y
-
 class Bullet(Tank_Sprite):
     def __init__(self):
         Tank_Sprite.__init__(self, "bullet_up.png")
@@ -173,9 +167,6 @@ class Tank(Tank_Sprite):
         elif self.dir_x == 1 and self.dir_y == 0:
             self.bullet.rect.left = self.rect.right + 1
             self.bullet.rect.top = self.rect.top + 20
-
-    def getFlag(self, flag):
-        return self.rect.colliderect(flag.rect)
 
 class Flag(Tank_Sprite):
     def __init__(self, image_file, x, y):
