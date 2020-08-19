@@ -3,6 +3,7 @@ import pygame
 WINDOW_WIDTH, WINDOW_HEIGHT = 640,672
 
 BRICK_WIDTH, BRICK_HEIGHT = 24,24
+FLAG_WIDTH, FLAG_HEIGHT = 24,24
 # 坦克大小
 TANK_WIDTH, TANK_HEIGHT = 40, 40
 # 坦克移動的速度
@@ -11,7 +12,7 @@ TANK_SPEED = 5
 
 Map = [
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0],
 [0,0,1,1,0,0,1,1,0,0,1,1,1,1,1,1,0,0,1,1,0,0,1,1,0,0],
 [0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0],
@@ -48,7 +49,7 @@ class Tank_Sprite(pygame.sprite.Sprite):
         self.image = pygame.image.load("images/" + image_file).convert()
         # 設定透明的 colorkey, 如果圖片的顏色與 colorkey 所指定的顏色相同則會顯示成透明
         # 目前是圖片中黑色的部分會顯示成透明
-        self.image.set_colorkey((0, 0, 0))
+        
         # 物件的 rect(長方形) 以圖片的長寬來定義
         self.rect = self.image.get_rect()
 
@@ -58,12 +59,6 @@ class Brick(Tank_Sprite):
     # 設定磚塊位置
         Tank_Sprite.__init__(self, image_file)
         self.rect.left, self.rect.top = x, y
-
-class Grass(Tank_Sprite):
-    def __init__(self, image_file, x, y):
-    # 設定磚塊位置
-        Tank_Sprite.__init__(self, image_file)
-        self.rect.x, self.rect.y = x, y
 
 class Bullet(Tank_Sprite):
     def __init__(self):
@@ -95,7 +90,6 @@ class Bullet(Tank_Sprite):
             self.image = self.image_left
     def move(self):
         self.rect.move_ip(self.speed * self.dir_x, self.speed * self.dir_y)
-
 
 class Tank(Tank_Sprite):
     def __init__(self, image_file):
@@ -161,7 +155,6 @@ class Tank(Tank_Sprite):
         self.bullet.changeDir(self.dir_x, self.dir_y)
         self.bullet.life = True
 
-
         if self.dir_x == 0 and self.dir_y == -1:
             self.bullet.rect.left = self.rect.left + 20
             self.bullet.rect.bottom = self.rect.top + 1
@@ -174,7 +167,10 @@ class Tank(Tank_Sprite):
         elif self.dir_x == 1 and self.dir_y == 0:
             self.bullet.rect.left = self.rect.right + 1
             self.bullet.rect.top = self.rect.top + 20
-        
 
-
+class Flag(Tank_Sprite):
+    def __init__(self, image_file, x, y):
+        Tank_Sprite.__init__(self, image_file)
+        self.rect.left, self.rect.top = x, y
+        self.image.set_colorkey((255, 255, 255))
 
